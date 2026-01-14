@@ -1,0 +1,7 @@
+FROM tomcat:11
+
+# Expose the Tomcat port
+EXPOSE 8080
+
+# Set the entrypoint to the Tomcat script
+CMD ["catalina.sh", "run"]
