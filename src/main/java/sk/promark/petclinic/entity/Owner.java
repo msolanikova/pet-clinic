@@ -4,13 +4,14 @@ import jakarta.persistence.*;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table(name = "owners")
 public class Owner {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String uuid;
+    @Column(name = "uuid", length = 36, nullable = false, updatable = false)
+    private String uuid = UUID.randomUUID().toString();
     private String firstname;
     private String lastname;
     private String address;
@@ -60,11 +61,11 @@ public class Owner {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Owner owner)) return false;
-        return Objects.equals(getFirstname(), owner.getFirstname()) && Objects.equals(getLastname(), owner.getLastname()) && Objects.equals(getAddress(), owner.getAddress());
+        return Objects.equals(getUuid(), owner.getUuid());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getFirstname(), getLastname(), getAddress());
+        return Objects.hashCode(getUuid());
     }
 }

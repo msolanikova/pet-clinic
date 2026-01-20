@@ -4,14 +4,15 @@ import jakarta.persistence.*;
 
 import java.util.Date;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table(name = "visits")
 public class Visit {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String uuid;
+    @Column(name = "uuid", length = 36, nullable = false, updatable = false)
+    private String uuid = UUID.randomUUID().toString();
 
     @Column(name = "visit_date")
     private Date visitDate;
@@ -56,11 +57,11 @@ public class Visit {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Visit visit)) return false;
-        return Objects.equals(getVisitDate(), visit.getVisitDate()) && Objects.equals(getPet(), visit.getPet());
+        return Objects.equals(getUuid(), visit.getUuid());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getVisitDate(), getPet());
+        return Objects.hashCode(getUuid());
     }
 }
