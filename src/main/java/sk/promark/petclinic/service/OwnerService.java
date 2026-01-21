@@ -7,15 +7,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import sk.promark.petclinic.entity.Owner;
-import sk.promark.petclinic.entity.Pet;
-import sk.promark.petclinic.mapper.OwnersResponseMapper;
-import sk.promark.petclinic.mapper.PetMapper;
+import sk.promark.petclinic.mapper.OwnerAssembler;
+import sk.promark.petclinic.mapper.OwnerMapper;
 import sk.promark.petclinic.model.Metadata;
 import sk.promark.petclinic.model.OwnerModel;
 import sk.promark.petclinic.model.OwnersResponse;
 import sk.promark.petclinic.repository.OwnerRepository;
-
-import java.util.List;
 
 
 @Service
@@ -23,16 +20,13 @@ public class OwnerService {
     private static final Logger LOG = LoggerFactory.getLogger(OwnerService.class);
 
     private final OwnerRepository repo;
-    private final OwnersResponseMapper mapper;
-    private final PetMapper petMapper;
-    private final PetTypeService petTypeService;
+    private final OwnerAssembler assembler;
+    private final OwnerMapper mapper;
 
-    public OwnerService(OwnerRepository ownerRepository, OwnersResponseMapper mapper, PetMapper petMapper,
-                        PetTypeService petTypeService) {
+    public OwnerService(OwnerRepository ownerRepository, OwnerAssembler assembler, OwnerMapper mapper) {
         this.repo = ownerRepository;
+        this.assembler = assembler;
         this.mapper = mapper;
-        this.petMapper = petMapper;
-        this.petTypeService = petTypeService;
     }
 
     public OwnersResponse getOwners(int page, int size) {
@@ -43,18 +37,10 @@ public class OwnerService {
     }
 
     public OwnerModel createOwner(OwnerModel owner) {
-        Owner entity = mapper.dtoToEntity(owner);
-
-        if (owner.pets() != null) {
-            List<Pet> pets = owner.pets().stream().map(p -> petMapper.toPetEntity(p, petTypeService)).toList();
-
-            pets.forEach(p -> p.setOwner(entity));
-            entity.setPets(pets);
-        }
-
+        Owner entity = assembler.toEntity(owner);
         Owner savedEntity = repo.save(entity);
 
-        OwnerModel ownerModel = mapper.toOwnerDto(savedEntity);
+        OwnerModel ownerModel = mapper.toModel(savedEntity);
         LOG.info("Created owner {}", ownerModel);
         return ownerModel;
     }
