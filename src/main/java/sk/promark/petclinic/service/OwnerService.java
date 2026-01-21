@@ -1,5 +1,6 @@
 package sk.promark.petclinic.service;
 
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -36,8 +37,20 @@ public class OwnerService {
         return mapper.toResponse(metadata, owners.getContent());
     }
 
+    @Transactional
     public OwnerModel createOwner(OwnerModel owner) {
-        Owner entity = assembler.toEntity(owner);
+        OwnerModel model = new OwnerModel(owner.firstname().trim(), owner.lastname().trim(), owner.address().trim(),
+                owner.pets());
+
+        boolean ownerExists =
+                repo.existsByFirstnameIgnoreCaseAndLastnameIgnoreCaseAndAddressIgnoreCase(model.firstname(),
+                        model.lastname(), model.address());
+
+        if (ownerExists) {
+            throw new IllegalStateException("Owner already exists");
+        }
+
+        Owner entity = assembler.toEntity(model);
         Owner savedEntity = repo.save(entity);
 
         OwnerModel ownerModel = mapper.toModel(savedEntity);

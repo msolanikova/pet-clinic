@@ -1,5 +1,6 @@
 package sk.promark.petclinic.controller;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import org.springframework.web.bind.annotation.*;
 import sk.promark.petclinic.model.OwnerModel;
@@ -24,7 +25,7 @@ public class OwnerController {
     }
 
     @PostMapping
-    public OwnerModel createOwner(@RequestBody OwnerModel ownerModel) {
+    public OwnerModel createOwner(@RequestBody @Valid OwnerModel ownerModel) {
         return ownerService.createOwner(ownerModel);
     }
 }
