@@ -11,6 +11,7 @@ import sk.promark.petclinic.entity.Pet;
 import sk.promark.petclinic.mapper.OwnersResponseMapper;
 import sk.promark.petclinic.mapper.PetMapper;
 import sk.promark.petclinic.model.Metadata;
+import sk.promark.petclinic.model.OwnerModel;
 import sk.promark.petclinic.model.OwnersResponse;
 import sk.promark.petclinic.repository.OwnerRepository;
 
@@ -41,7 +42,7 @@ public class OwnerService {
         return mapper.toResponse(metadata, owners.getContent());
     }
 
-    public sk.promark.petclinic.model.Owner createOwner(sk.promark.petclinic.model.Owner owner) {
+    public OwnerModel createOwner(OwnerModel owner) {
         Owner entity = mapper.dtoToEntity(owner);
 
         if (owner.pets() != null) {
@@ -53,7 +54,7 @@ public class OwnerService {
 
         Owner savedEntity = repo.save(entity);
 
-        sk.promark.petclinic.model.Owner ownerModel = mapper.toOwnerDto(savedEntity);
+        OwnerModel ownerModel = mapper.toOwnerDto(savedEntity);
         LOG.info("Created owner {}", ownerModel);
         return ownerModel;
     }

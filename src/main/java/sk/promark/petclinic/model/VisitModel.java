@@ -1,4 +1,4 @@
 package sk.promark.petclinic.model;
 
-public class Visit {
+public class VisitModel {
 }
