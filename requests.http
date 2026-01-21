@@ -6,14 +6,14 @@ POST http://localhost:8080/owners
 Content-Type: application/json
 
 {
-  "firstname": "Margareta",
-  "lastname": "Soltysova",
-  "address": "Budimir",
+  "firstname": "",
+  "lastname": "",
+  "address": "",
   "pets": [
     {
-      "name": "Cora",
-      "animalType": "dog",
-      "dateOfBirth": "2021-05-14"
+      "name": "",
+      "animalType": "",
+      "dateOfBirth": ""
     }
   ]
 }
