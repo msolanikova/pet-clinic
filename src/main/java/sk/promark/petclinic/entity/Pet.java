@@ -76,4 +76,9 @@ public class Pet {
     public int hashCode() {
         return Objects.hashCode(getUuid());
     }
+
+    @Override
+    public String toString() {
+        return "Pet{" + "petType=" + petType + ", dateOfBirth=" + dateOfBirth + ", name='" + name + '\'' + ", uuid='" + uuid + '\'' + '}';
+    }
 }

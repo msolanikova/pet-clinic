@@ -40,4 +40,9 @@ public class PetType {
     public int hashCode() {
         return Objects.hashCode(animalType);
     }
+
+    @Override
+    public String toString() {
+        return "PetType{" + "id=" + id + ", animalType='" + animalType + '\'' + '}';
+    }
 }

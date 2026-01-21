@@ -64,4 +64,9 @@ public class Visit {
     public int hashCode() {
         return Objects.hashCode(getUuid());
     }
+
+    @Override
+    public String toString() {
+        return "Visit{" + "uuid='" + uuid + '\'' + ", visitDate=" + visitDate + ", pet=" + pet + ", description='" + description + '\'' + '}';
+    }
 }

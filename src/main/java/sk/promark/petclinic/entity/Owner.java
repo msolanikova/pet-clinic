@@ -68,4 +68,9 @@ public class Owner {
     public int hashCode() {
         return Objects.hashCode(getUuid());
     }
+
+    @Override
+    public String toString() {
+        return "Owner{" + "uuid='" + uuid + '\'' + ", firstname='" + firstname + '\'' + ", lastname='" + lastname + '\'' + ", address='" + address + '\'' + ", pets=" + pets + '}';
+    }
 }
