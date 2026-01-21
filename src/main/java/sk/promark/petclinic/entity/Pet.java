@@ -18,7 +18,7 @@ public class Pet {
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "pet_type_id")
     private PetType petType;
 

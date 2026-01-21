@@ -1,10 +1,8 @@
 package sk.promark.petclinic.controller;
 
 import jakarta.validation.constraints.Min;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import sk.promark.petclinic.model.Owner;
 import sk.promark.petclinic.model.OwnersResponse;
 import sk.promark.petclinic.service.OwnerService;
 
@@ -23,5 +21,10 @@ public class OwnerController {
                                     @RequestParam(name = "size", defaultValue = "2") @Min(1) int size) {
 
         return ownerService.getOwners(page, size);
+    }
+
+    @PostMapping
+    public Owner createOwner(@RequestBody Owner owner) {
+        return ownerService.createOwner(owner);
     }
 }
