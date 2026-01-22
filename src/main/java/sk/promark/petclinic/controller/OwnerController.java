@@ -19,13 +19,23 @@ public class OwnerController {
 
     @GetMapping
     public OwnersResponse getOwners(@RequestParam(name = "page", defaultValue = "0") @Min(0) int page,
-                                    @RequestParam(name = "size", defaultValue = "2") @Min(1) int size) {
+                                    @RequestParam(name = "size", defaultValue = "2") @Min(1) int size,
+                                    @RequestParam(name = "lastname", required = false) String lastname) {
 
-        return ownerService.getOwners(page, size);
+        if (lastname == null) {
+            return ownerService.getOwners(page, size);
+        }
+
+        return ownerService.searchOwenrs(lastname, page, size);
     }
 
     @PostMapping
     public OwnerModel createOwner(@RequestBody @Valid OwnerModel ownerModel) {
         return ownerService.createOwner(ownerModel);
+    }
+
+    @GetMapping("/{uuid}")
+    public OwnerModel getOwner(@PathVariable("uuid") String uuid) {
+        return ownerService.getOwner(uuid);
     }
 }

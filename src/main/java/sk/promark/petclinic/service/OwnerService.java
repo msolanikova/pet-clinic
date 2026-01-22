@@ -33,6 +33,7 @@ public class OwnerService {
         this.mapper = mapper;
     }
 
+    @Transactional
     public OwnersResponse getOwners(int page, int size) {
         Page<Owner> owners = repo.findAll(PageRequest.of(page, size, Sort.by("lastname")));
         Metadata metadata = new Metadata(owners.getTotalElements(), page, size);
@@ -57,7 +58,27 @@ public class OwnerService {
         Owner savedEntity = repo.save(entity);
 
         OwnerModel ownerModel = mapper.toModel(savedEntity);
-        LOG.info("Created owner {}", ownerModel);
+        LOG.debug("Created owner {}", ownerModel);
         return ownerModel;
+    }
+
+    @Transactional
+    public OwnerModel getOwner(String uuid) {
+        Owner entity = repo.findByUuid(uuid);
+        if (entity == null) {
+            throw new DomainException(new OwnerNotFoundError(uuid));
+        }
+        OwnerModel ownerModel = mapper.toModel(entity);
+        LOG.debug("Retrieved owner {}", ownerModel);
+        return ownerModel;
+    }
+
+    @Transactional
+    public OwnersResponse searchOwenrs(String lastnamePart, int page, int size) {
+        Page<Owner> owners = repo.findByLastnameContainsIgnoreCase(PageRequest.of(page, size, Sort.by("lastname")),
+                lastnamePart);
+        Metadata metadata = new Metadata(owners.getTotalElements(), page, size);
+
+        return mapper.toResponse(metadata, owners.getContent());
     }
 }
