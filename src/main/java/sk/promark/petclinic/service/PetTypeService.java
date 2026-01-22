@@ -2,6 +2,8 @@ package sk.promark.petclinic.service;
 
 import org.springframework.stereotype.Service;
 import sk.promark.petclinic.entity.PetType;
+import sk.promark.petclinic.exception.DomainException;
+import sk.promark.petclinic.exception.UnsupportedPetTypeError;
 import sk.promark.petclinic.repository.PetTypeRepository;
 
 import java.util.List;
@@ -18,7 +20,7 @@ public class PetTypeService {
         List<PetType> types = repo.searchDistinctByAnimalType(animalType);
 
         if (types == null || types.isEmpty()) {
-            throw new RuntimeException("Animal type not found");
+            throw new DomainException(new UnsupportedPetTypeError(animalType));
         }
 
         return types.getFirst();

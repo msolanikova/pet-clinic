@@ -1,4 +1,4 @@
-package sk.promark.petclinic.controller;
+package sk.promark.petclinic.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -19,6 +19,18 @@ import java.util.Map;
 @RestControllerAdvice
 public class PetClinicExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(PetClinicExceptionHandler.class);
+
+    @ExceptionHandler(DomainException.class)
+    public ResponseEntity<ErrorResponse> handleDomainExceptions(DomainException ex, HttpServletRequest request) {
+        log.warn("Domain exception raised for request {} {}: {}", request.getMethod(), request.getRequestURI(),
+                ex.getMessage());
+
+        DomainError error = ex.getError();
+        ErrorResponse body = new ErrorResponse(error.code(), ex.getMessage(), Instant.now(), request.getRequestURI(),
+                null);
+
+        return ResponseEntity.status(error.status()).body(body);
+    }
 
     @ExceptionHandler({HandlerMethodValidationException.class, MethodArgumentNotValidException.class})
     public ResponseEntity<ErrorResponse> handleBadRequestExceptions(Exception ex, HttpServletRequest request) {

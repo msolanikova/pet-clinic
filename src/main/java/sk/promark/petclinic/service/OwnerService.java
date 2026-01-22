@@ -8,6 +8,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import sk.promark.petclinic.entity.Owner;
+import sk.promark.petclinic.exception.DomainException;
+import sk.promark.petclinic.exception.OwnerExistsError;
+import sk.promark.petclinic.exception.OwnerNotFoundError;
 import sk.promark.petclinic.mapper.OwnerAssembler;
 import sk.promark.petclinic.mapper.OwnerMapper;
 import sk.promark.petclinic.model.Metadata;
@@ -47,7 +50,7 @@ public class OwnerService {
                         model.lastname(), model.address());
 
         if (ownerExists) {
-            throw new IllegalStateException("Owner already exists");
+            throw new DomainException(new OwnerExistsError(model.firstname(), model.lastname()));
         }
 
         Owner entity = assembler.toEntity(model);
