@@ -23,7 +23,7 @@ public class PetClinicExceptionHandler {
     @ExceptionHandler(DomainException.class)
     public ResponseEntity<ErrorResponse> handleDomainExceptions(DomainException ex, HttpServletRequest request) {
         log.warn("Domain exception raised for request {} {}: {}", request.getMethod(), request.getRequestURI(),
-                ex.getMessage());
+                ex.getMessage(), ex);
 
         DomainError error = ex.getError();
         ErrorResponse body = new ErrorResponse(error.code(), ex.getMessage(), Instant.now(), request.getRequestURI(),
@@ -35,7 +35,7 @@ public class PetClinicExceptionHandler {
     @ExceptionHandler({HandlerMethodValidationException.class, MethodArgumentNotValidException.class})
     public ResponseEntity<ErrorResponse> handleBadRequestExceptions(Exception ex, HttpServletRequest request) {
         log.warn("Validation failed for request {} {}: {}", request.getMethod(), request.getRequestURI(),
-                ex.getMessage());
+                ex.getMessage(), ex);
 
         Map<String, String> details = new LinkedHashMap<>();
         if (ex instanceof MethodArgumentNotValidException manve) {
@@ -51,14 +51,14 @@ public class PetClinicExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleException(Exception e, HttpServletRequest request) {
-        if (e instanceof NoResourceFoundException && "favicon.ico".equals(((NoResourceFoundException) e).getResourcePath())) {
+    public ResponseEntity<ErrorResponse> handleException(Exception ex, HttpServletRequest request) {
+        if (ex instanceof NoResourceFoundException && "favicon.ico".equals(((NoResourceFoundException) ex).getResourcePath())) {
             return ResponseEntity.notFound().build();
         }
-        log.warn("Exception for request {} {}: {}", request.getMethod(), request.getRequestURI(), e.getMessage());
+        log.warn("Exception for request {} {}: {}", request.getMethod(), request.getRequestURI(), ex.getMessage(), ex);
 
         Map<String, String> details = new LinkedHashMap<>();
-        ErrorResponse body = new ErrorResponse("VALIDATION_ERROR", e.getMessage(), Instant.now(),
+        ErrorResponse body = new ErrorResponse("VALIDATION_ERROR", ex.getMessage(), Instant.now(),
                 request.getRequestURI(), details);
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
