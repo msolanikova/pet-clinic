@@ -3,8 +3,8 @@ package sk.promark.petclinic.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import sk.promark.petclinic.entity.PetType;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface PetTypeRepository extends JpaRepository<PetType, Integer> {
-    List<PetType> searchDistinctByAnimalType(String animalType);
+    Optional<PetType> findByAnimalTypeIgnoreCase(String animalType);
 }
