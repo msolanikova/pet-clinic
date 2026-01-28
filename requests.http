@@ -1,3 +1,11 @@
+GET http://localhost:8080/owners/uuid
+Accept: application/json
+
+###
+GET http://localhost:8080/owners?lastname=ova&size=10
+Accept: application/json
+
+###
 GET http://localhost:8080/owners?page=1&size=5
 Content-Type: application/json
 
